@@ -7,19 +7,16 @@ interface FilterPanelProps {
   onClear: () => void;
 }
 
-const POSITION_OPTIONS = [
-  { value: "", label: "All Positions" },
-  { value: "Goalkeeper", label: "Goalkeeper" },
-  { value: "Defender", label: "Defender" },
-  { value: "Midfielder", label: "Midfielder" },
-  { value: "Forward", label: "Forward" },
-];
-
 export default function FilterPanel({
+  positions,
   selectedPosition,
   onPositionChange,
   onClear,
 }: FilterPanelProps) {
+  const positionOptions = [
+    { value: "", label: "All Positions" },
+    ...positions.map((p) => ({ value: p, label: p })),
+  ];
   return (
     <div className="bg-white rounded-xl shadow-md p-4 border border-gray-100">
       <div className="flex items-center justify-between mb-3">
@@ -46,7 +43,7 @@ export default function FilterPanel({
           onChange={(e) => onPositionChange(e.target.value)}
           className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
-          {POSITION_OPTIONS.map((opt) => (
+          {positionOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
               {opt.label}
             </option>
