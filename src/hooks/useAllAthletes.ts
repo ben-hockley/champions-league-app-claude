@@ -12,12 +12,12 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export function useAllAthletes() {
   const { data, error, isLoading } = useSWR<AllAthletesResponse>(
-    `/api/athletes?page=1&limit=1000`,
+    `/api/athletes`,
     fetcher,
     {
       revalidateOnFocus: false,
-      dedupingInterval: 600000, // 10 minutes
-      errorRetryCount: 3,
+      dedupingInterval: 1800000, // 30 minutes
+      shouldRetryOnError: false,
     }
   );
 

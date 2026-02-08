@@ -77,7 +77,7 @@ function PlayersPageContent() {
     selectedCountries,
     ageRange: effectiveAgeRange,
     currentPage: page,
-    playersPerPage: 25,
+    playersPerPage: 24,
   });
 
   // Sync state to URL

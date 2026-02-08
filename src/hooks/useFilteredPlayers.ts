@@ -20,7 +20,7 @@ export function useFilteredPlayers({
   selectedCountries,
   ageRange,
   currentPage,
-  playersPerPage = 25,
+  playersPerPage = 24,
 }: UseFilteredPlayersParams) {
   const filterMetadata = useMemo(() => {
     const clubs = new Set<string>();

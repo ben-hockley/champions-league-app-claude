@@ -1,23 +1,18 @@
 import { NextResponse } from "next/server";
-import { fetchAllAthleteRefs, fetchAthleteDetails } from "@/lib/api/espn";
+import {
+  fetchAllAthleteRefs,
+  fetchNormalizedAthlete,
+} from "@/lib/api/espn";
 import type { NormalizedAthlete } from "@/types/athlete";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-    const { searchParams } = new URL(request.url);
-    const limit = parseInt(searchParams.get("limit") || "50", 10);
-    const page = parseInt(searchParams.get("page") || "1", 10);
-    const pageSize = Math.min(limit, 1000);
-    const offset = (page - 1) * pageSize;
-
     const athleteRefs = await fetchAllAthleteRefs(1000);
     const totalCount = athleteRefs.items.length;
-    const pageItems = athleteRefs.items.slice(offset, offset + pageSize);
 
     const results = await Promise.all(
-      pageItems.map(async (item) => {
-        const refUrl = item.$ref;
-        const idMatch = refUrl.match(/athletes\/(\d+)/);
+      athleteRefs.items.map(async (item) => {
+        const idMatch = item.$ref.match(/athletes\/(\d+)/);
         const athleteId = idMatch ? idMatch[1] : "";
 
         if (!athleteId) {
@@ -25,24 +20,7 @@ export async function GET(request: Request) {
         }
 
         try {
-          const details = await fetchAthleteDetails(athleteId);
-          return {
-            id: details.id,
-            firstName: details.firstName,
-            lastName: details.lastName,
-            fullName: details.fullName,
-            displayName: details.displayName,
-            age: details.age,
-            dateOfBirth: details.dateOfBirth,
-            citizenship: details.citizenship,
-            jersey: details.jersey,
-            position: details.position?.displayName,
-            positionAbbreviation: details.position?.abbreviation,
-            headshot: details.headshot?.href,
-            flagHref: details.flag?.href,
-            weight: details.displayWeight,
-            height: details.displayHeight,
-          } as NormalizedAthlete;
+          return await fetchNormalizedAthlete(athleteId);
         } catch {
           return null;
         }
@@ -56,9 +34,6 @@ export async function GET(request: Request) {
     return NextResponse.json({
       athletes,
       totalCount,
-      page,
-      pageSize,
-      totalPages: Math.ceil(totalCount / pageSize),
     });
   } catch (error) {
     const message =

@@ -17,10 +17,32 @@ const httpClient = axios.create({
 export async function fetchAllAthleteRefs(
   limit = 1000
 ): Promise<AthletesListResponse> {
-  const { data } = await httpClient.get<AthletesListResponse>(
-    `${API_BASE}/athletes?limit=${limit}`
-  );
-  return data;
+  const firstPage = (
+    await httpClient.get<AthletesListResponse>(
+      `${API_BASE}/athletes?limit=${limit}&page=1`
+    )
+  ).data;
+
+  const allItems = [...firstPage.items];
+
+  if (firstPage.pageCount > 1) {
+    for (let page = 2; page <= firstPage.pageCount; page++) {
+      try {
+        const { data } = await httpClient.get<AthletesListResponse>(
+          `${API_BASE}/athletes?limit=${limit}&page=${page}`
+        );
+        allItems.push(...data.items);
+      } catch (error) {
+        console.error(`Failed to fetch athletes page ${page}:`, error);
+      }
+    }
+  }
+
+  return {
+    ...firstPage,
+    items: allItems,
+    count: allItems.length,
+  };
 }
 
 export async function fetchAthleteDetails(
