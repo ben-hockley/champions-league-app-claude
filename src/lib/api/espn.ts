@@ -32,8 +32,8 @@ export async function fetchAllAthleteRefs(
           `${API_BASE}/athletes?limit=${limit}&page=${page}`
         );
         allItems.push(...data.items);
-      } catch {
-        // Continue fetching remaining pages if one fails
+      } catch (error) {
+        console.error(`Failed to fetch athletes page ${page}:`, error);
       }
     }
   }
