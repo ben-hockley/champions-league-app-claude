@@ -12,8 +12,8 @@ interface PlayerGridProps {
 export default function PlayerGrid({ athletes, isLoading }: PlayerGridProps) {
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {Array.from({ length: 12 }).map((_, i) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        {Array.from({ length: 25 }).map((_, i) => (
           <LoadingSkeleton key={i} type="card" />
         ))}
       </div>
@@ -31,7 +31,7 @@ export default function PlayerGrid({ athletes, isLoading }: PlayerGridProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
       {athletes.map((athlete) => (
         <PlayerCard key={athlete.id} player={athlete} />
       ))}

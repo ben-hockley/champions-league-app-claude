@@ -7,7 +7,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get("limit") || "50", 10);
     const page = parseInt(searchParams.get("page") || "1", 10);
-    const pageSize = Math.min(limit, 50);
+    const pageSize = Math.min(limit, 1000);
     const offset = (page - 1) * pageSize;
 
     const athleteRefs = await fetchAllAthleteRefs(1000);
