@@ -86,7 +86,7 @@ function PlayersPageContent() {
       searchTerm: search,
       selectedClubs,
       selectedCountries,
-      ageRange: ageRange ?? { min: 0, max: 0 },
+      ageRange,
       currentPage: page,
     });
     const currentUrl = window.location.search || "";

@@ -28,7 +28,9 @@ export function parseFiltersFromURL(
   };
 }
 
-export function buildFilterSearchParams(filters: FilterState): string {
+export function buildFilterSearchParams(
+  filters: Omit<FilterState, "ageRange"> & { ageRange: { min: number; max: number } | null }
+): string {
   const params = new URLSearchParams();
 
   if (filters.searchTerm) {
@@ -40,10 +42,8 @@ export function buildFilterSearchParams(filters: FilterState): string {
   if (filters.selectedCountries.length > 0) {
     params.set("countries", filters.selectedCountries.join(","));
   }
-  if (filters.ageRange.min) {
+  if (filters.ageRange != null) {
     params.set("ageMin", String(filters.ageRange.min));
-  }
-  if (filters.ageRange.max) {
     params.set("ageMax", String(filters.ageRange.max));
   }
   if (filters.currentPage > 1) {
